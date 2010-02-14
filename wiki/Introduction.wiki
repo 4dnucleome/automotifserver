@@ -2,11 +2,10 @@
 =AMS 3.0: Prediction of Post-Translational Modifications=
 
 ====Subhadip Basu====
-Department of Computer Science and Engineering, Jadavpur University, Kolkata – 700032, India subhadip@cse.jdvu.ac.in
+Department of Computer Science and Engineering, Jadavpur University, Kolkata – 700032, India, Email: subhadip AT cse.jdvu.ac.in
 
 ====Dariusz Plewczynski====
-Interdisciplinary Centre for Mathematical and Computational Modeling, University of Warsaw, 
-02-106 Warsaw, Poland, darman@icm.edu.pl
+Interdisciplinary Centre for Mathematical and Computational Modeling, University of Warsaw, 02-106 Warsaw, Poland, Email: darman AT icm.edu.pl
 
 
 
