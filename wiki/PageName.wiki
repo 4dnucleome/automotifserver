@@ -1,0 +1,30 @@
+#AMS 3.0: Prediction of Post-Translational Modifications
+
+= Introduction =
+
+Subhadip Basu
+Department of Computer Science and Engineering, Jadavpur University, Kolkata – 700032, India subhadip@cse.jdvu.ac.in
+
+Dariusz Plewczynski
+Interdisciplinary Centre for Mathematical and Computational Modeling, University of Warsaw, 
+02-106 Warsaw, Poland, darman@icm.edu.pl
+
+Add your content here.
+
+
+= Details =
+
+ABSTRACT
+
+Motivation: We present here the recent update of AMS algorithm for identification of post-translational modification (PTM) sites in proteins based only on sequence information, using artificial neural network (ANN) method. The query protein sequence is dissected into overlapping short sequence segments. Ten different physicochemical features describe each amino acid; therefore nine residue long segment is represented as a point in a 90 dimensional space. The database of sequence segments with confirmed by experiments post-translational modification sites is used for training a set of ANNs. The efficiency of the classification for each type of modification and the prediction power of the method is estimated here using the leave-one-out tests and the area under ROC curves. The significant differences in the performance for differently optimized neural networks are observed, yet the AMS 3.0 tool integrates those heterogeneous classification schemes into the single consensus scheme, and it is able to boost the precision and recall values independent of a PTM type in comparison with the currently available state-of-the art methods. The standalone version of AMS 3.0 presents an efficient way to indentify post-translational modifications for whole proteomes, and is available from authors upon request.
+
+Availability: The processed training PTM database and the C code version of the software are available at http://bio.icm.edu.pl/~darman/ams3/
+
+Contact: subhadip@cse.jdvu.ac.in or darman@icm.edu.pl
+
+
+Full text: The complete article is now under review.
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
