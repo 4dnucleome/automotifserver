@@ -55,14 +55,17 @@ Above are different neural network parameters to be tuned.
 
 
 //Compile the Predictor program.
-
+{{{
 USAGE:./a.out <0/1> <HLN1> <HLN2> <STEP> <R/P/A> [> <LOGFILE>]
-
+}}}
 Input '0' in first parameter signifies: train the dataset with hidden neuron variations from HLN1 to HLN2 with step size STEP for optimized Recall (R) or Precision (P) or AUC (A). 
 Warning: All the existing network files will be overwritten.
 Example:
+{{{
 ./a.out 0 2 20 2 A
-
+}}}
 Input '1' in first parameter signifies: test the dataset with existing networks with variations from HLN1 to HLN2 with step size STEP for optimized Recall (R) or Precision (P) or AUC (A). 
 Example:
+{{{
 ./a.out 1 2 20 2 A 
+}}}
