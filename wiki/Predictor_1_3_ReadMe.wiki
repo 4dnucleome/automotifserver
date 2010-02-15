@@ -1,0 +1,68 @@
+#labels Predictor_1_3,MLP.h,PTM.h,ReadMe
+=Predictor_1_3.c=
+MLP based program that Trains and tests different PTM datasets
+
+For different types of PTMs update the following in the two associated header files:
+
+==PTM.h==
+
+{{{
+#define POS 100 	//Total Positive samples
+#define NEG 1000 	//Total Negative samples
+#define TRPOS 80	//Positive samples for training
+#define TRNEG 80	//Negative samples for training
+#define TESTNEG 80	//Negative samples for testing
+//Positive samples for testing = POS-TRPOS
+
+char *POS_file	="Phospho_CDC2.pos";	//Positive filename
+char *NEG_file	="Phospho_CDC2.neg";	//Negative filename
+
+#define MAXFET 10	//Total number of features considered
+
+char AAI[MAXFET][11]={	//Feature description from AAindex-ID
+		"BIOV880101",
+		"BIOV880102",
+		"KRIW710101",
+		"KRIW790101",
+		"KRIW790102",
+		"KRIW790103",
+		"BLAS910101",
+		"HOPA770101",
+		"LAWE840101",
+		"OOBM850105"
+		};
+////////////////////////////////////////
+#define NOF 9*MAXFET //Dimension of Feature vector: (length of AA sequence)*MAXFET
+}}}
+
+
+==MLP.h==
+
+{{{
+////////////////////////////////////////
+#define MAX 100 //Maximum no. of neurons possible in a layer
+#define ETA 0.8 //Learning Rate
+#define ALPHA 0.8 //Acceleration factor
+#define ETOL 0.0000001 //Error tollerrance
+#define ITN 1000 //No. of iterations
+#define L 2 //No. of layers beyond input layer
+#define a 0.15 //Adjustment factor for sigmoid function
+////////////////////////////////////////
+}}}
+Above are different neural network parameters to be tuned.
+
+
+
+
+//Compile the Predictor program.
+
+USAGE:./a.out <0/1> <HLN1> <HLN2> <STEP> <R/P/A> [> <LOGFILE>]
+
+Input '0' in first parameter signifies: train the dataset with hidden neuron variations from HLN1 to HLN2 with step size STEP for optimized Recall (R) or Precision (P) or AUC (A). 
+Warning: All the existing network files will be overwritten.
+Example:
+./a.out 0 2 20 2 A
+
+Input '1' in first parameter signifies: test the dataset with existing networks with variations from HLN1 to HLN2 with step size STEP for optimized Recall (R) or Precision (P) or AUC (A). 
+Example:
+./a.out 1 2 20 2 A 
