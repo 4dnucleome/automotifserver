@@ -12,14 +12,8 @@ email: D.Plewczynski@icm.edu.pl
 
 = Details =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
-
-
 The software has the following program components:
-
+{{{
 ++++++++++++
 SeqGen: 
 ++++++++++++
@@ -471,3 +465,4 @@ where the numbers represent prediction status (1:POS and 0:NEG) of a fragment af
 TRRASFSAQ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 0 1 1 1 1 0 1 1 27
 
 The above fragment is classified as POS by 27 optimized networks. So it is classified as a 27-star quality POS Fragment.
+}}}
