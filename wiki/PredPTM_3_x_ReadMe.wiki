@@ -1,0 +1,473 @@
+#labels PredPTM,PTM,Consensus,MLP,AMS
+#ReadMe file for PredPTM 3.* series of consensus based PTM site prediction programs
+
+= Introduction =
+
+This is an MLP based PTM-predictor software for feature extraction and testing of short AA sequences. This version of the software implements consensus prediction from multiple classification decisions. 
+Designed for Console based Windows/LINUX environment: parameters through command line
+Developed by Dr. Subhadip Basu, CSE Department, Jadavpur University, India.
+email: subhadip8@yahoo.com 
+in collaboration with Dr. Dariusz Plewczynski, ICM, University of Warsaw, Poland.
+email: D.Plewczynski@icm.edu.pl
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
+
+
+The software has the following program components:
+
+++++++++++++
+SeqGen: 
+++++++++++++
+Generates 9 amino acid long overlapping sequences from an input file with multiple protein sequences in FASTA format
+
+USAGE:./SeqGen <AA Sequence FILE in FASTA format>
+Example: ./SeqGen FASTA
+
+Sample input format of the FASTA file:
+
+>gi|5524211|gb|AAD44166.1| cytochrome b [Elephas maximus maximus]
+LCLYTHIGRNIYYGSYLYSETWNTGIMLLLITMATAFMGYVLPWGQMSFWGATVITNLFSAIPYIGTNLV
+EWIWGGFSVDKATLNRFFAFHFILPFTMVALAGVHLTFLHETGSNNPLGLTSDSDKIPFHPYYTIKDFLG
+LLILILLLLLLALLSPDMLGDPDNHMPADPLNTPLHIKPEWYFLFAYAILRSVPNKLGGVLALFLSIVIL
+GLMPFLHTSKHRSMMLRPLSQALFWTLTMDLLTLTWIGSQPVEYPYTIIGQMASILYFSIILAFLPIAGX
+IENY
+>SEQUENCE_1
+MTEITAAMVKELRESTGAGMMDCKNALSETNGDFDKAVQLLREKGLGKAAKKADRLAAEG
+LVSVKVSDDFTIAAMRPSYLSYEDLDMTFVENEYKALVAELEKENEERRRLKDPNKPEHK
+IPQFASRKQLSDAILKEAEEKIKEELKAQGKPEKIWDNIIPGKMNSFIADNSQLDSKLTL
+MGQFYVMDDKKTVEQVIAEKEKEFGGKIKIVEFICFEVGEGLEKKTEDFAAEVAAQL
+>SEQUENCE_2
+SATVSEINSETDFVAKNDQFIALTKDTTAHIQSNSLQSVEELHSSTINGVKFEEYLKSQI
+ATIGENLVVRRFATLKAGANGVVNGYIHTNGRVGVVIAAACDSAEVASKSRDLLRQICMH
+
+Output of SeqGen is a file: SEQUENCE with the following format
+
+The first row signifies the number of entries in the SEQUENCE file (Max: 100000)
+
+617
+LCLYTHIGR
+CLYTHIGRN
+LYTHIGRNI
+YTHIGRNIY
+THIGRNIYY
+HIGRNIYYG
+IGRNIYYGS
+GRNIYYGSY
+RNIYYGSYL
+NIYYGSYLY
+IYYGSYLYS
+YYGSYLYSE
+YGSYLYSET
+GSYLYSETW
+SYLYSETWN
+YLYSETWNT
+LYSETWNTG
+YSETWNTGI
+.....
+.....
+.....
+.....
+
+
+++++++++++++++++++++++++++++
+PredPTM_3_01 and PredPTM_3_11:
+++++++++++++++++++++++++++++
+
+USAGE:./PredPTM_3_01 <PTM type> <ARP/AR>
+Example: ./PredPTM_3_01 Phospho_PKC ARP
+
+
+The following 88 PTM types are supported and can be used as the first parameter:
+================================================================================
+3,4-dihydroxyproline
+4-carboxyglutamate
+4-hydroxyproline
+5-hydroxylysine
+Abl
+acetylglycine
+acetyllysine
+acetylmethionine
+acetylserine
+acetylthreonine
+allempty
+Allysine
+AMPK_group
+Asparagine
+aspartylphosphate
+ATM
+Blocked_amino_end
+Blocked_amino_end_Met
+CaM-KII_group
+CaM-KIIalpha
+CDK_group
+CDK1
+CDK2
+CK1_group
+CK2_alpha
+CK2_group
+Cysteine
+Cysteine_amide
+Cysteine_methyl
+dihydroxyphenylalanine
+dimethylarginine
+EGFR
+Fyn
+Glutamate
+Glutamate_methyl
+Glycine
+Glycine_amide
+GRK_group
+GSK-3_group
+GSK-3beta
+Hydroxyproline
+IGF1R
+IKK_group
+InsR
+Lck
+Leucine
+Lyn
+Lysine_methyl
+Lysine_trimethyl
+MAPK_group
+MAPK1
+MAPK14
+MAPK3
+MAPK8
+MAPKAPK2
+Methionine
+methylated_arginine
+PDK-1
+Phenylalanine
+Phospho_auto
+Phospho_CDC2
+Phospho_PKA
+Phospho_PKC
+Phosphoserine
+Phosphoserine_autocatalysis
+Phosphoserine_CaMK2
+Phosphoserine_CDC2
+Phosphoserine_CK2
+Phosphoserine_PKA
+Phosphoserine_PKC
+Phosphothreonine
+Phosphothreonine_autocatalysis
+Phosphothreonine_CDC2
+Phosphotyrosine
+Phosphotyrosine_autocatalysis
+PKA_alpha
+PKA_group
+PKB_group
+PKC_alpha
+PKC_group
+PLK1
+Pyrrolidone
+Pyruvic
+Src
+Sulfotyrosine
+Syk
+Tyrosine
+Valine
+
+
+For any given PTM, we have 3 optimized classifiers (networks) A, R and P, let the respective weights be CA, CR and CP. These values are estimated from the performances of the best AUC networks on the respective test datasets. e.g., for the following PTM:
+
+Sample_PTM							
+A	Hidden Neuron	ERROR	RECALL	PRECISION	TPR	FPR	AUC
+Testset	16	10.99	86.96	44.64	0.8696		0.1078	0.8809
+TrainSet	16	10.43	91.74	62.8		0.9174	0.1087	0.9043
+R								
+Testset	6	11.7	85.22	42.79	0.8522		0.1139	0.86913
+TrainSet	6	10.36	91.74	62.99		0.9174	0.1078	0.904783
+P							
+Testset	4	5.69	48.7	81.16	0.487		0.0113	0.737826
+TrainSet	4	8.55	54.35	90.58		0.5435	0.0113	0.766087
+
+From the above table we estimate CA= 0.88, CR=0.86 and CP=0.73
+
+Now, for a sample sequence the classification results for the 3 classifiers may be obtained as follows (running PredPTM2.1):
+A
+RNIYYGSYL 1 0.8276
+
+R
+RNIYYGSYL 1 0.5420
+
+P
+RNIYYGSYL 0 0.8351
+
+So, using simple voting we can infer that the sequence is positive but it is difficult to assign confidence. We can also sum the individual confidences as follows:
+Positive: (0.8276+0.5420+0.1649) = 1.5345, Avg confidence: 0.5115
+Negative: (0.1724+0.458+0.8351) = 1.4655, Avg confidence: 0.4885
+
+This gives marginal lead to the positive classification (because strong negative rating by P)
+
+Now, we can assign classification weights to compute the weighted average as follows:
+
+Pos: (0.8276*0.88)+(0.542*0.86)+(0.1649*0.73)=0.7283+0.4661+0.1204=1.3148
+Neg: (0.1724*0.88)+(0.458*0.86)+( 0.8351*0.73)=0.1517+.3939+0.6096=1.1552
+
+Sum of Pos and Neg confidence: (1.3148+1.1552)=2.47
+
+Probability of Pos prediction: 1.3148/2.47=0.5423
+Probability of Neg prediction:1.552/2.47=0.4677
+Above computation gives higher weight to POS classification than our earlier estimate.
+
+
+
+Typical snapshot of the ‘Output’ file is given below, where the AA sequence is followed by the classification decision and confidence of the A, R, P optimized networks and their weighted combination respectively. The classifier confidences are considered as 0.761991, 0.742760 and 0.641290 respectively.
+
+DDKKTVEQV 0 0.551941 1 0.783177 0 0.659069 1 0.532033
+DKKTVEQVI 1 0.928969 1 0.861976 1 0.534033 1 0.774255
+KKTVEQVIA 0 0.972442 0 0.897650 0 0.809343 0 0.897818
+KTVEQVIAE 0 0.967797 0 0.949751 0 0.940046 0 0.953258
+TVEQVIAEK 0 0.991502 0 0.953227 0 0.945565 0 0.964527
+VEQVIAEKE 0 0.933786 0 0.863955 0 0.895658 0 0.898224
+EQVIAEKEK 0 0.701168 0 0.708532 0 0.764596 0 0.722670
+QVIAEKEKE 0 0.963289 0 0.914503 0 0.880559 0 0.921682
+VIAEKEKEF 0 0.973458 0 0.953217 0 0.944383 0 0.957764
+IAEKEKEFG 0 0.774222 0 0.569729 0 0.794051 0 0.709371
+AEKEKEFGG 0 0.976393 0 0.951435 0 0.929872 0 0.953853
+EKEKEFGGK 1 0.806580 1 0.655330 0 0.771302 1 0.581546
+KEKEFGGKI 0 0.964565 0 0.878749 0 0.843264 0 0.898615
+EKEFGGKIK 1 0.956097 1 0.863277 1 0.514481 1 0.777228
+KEFGGKIKI 0 0.989762 0 0.940010 0 0.898712 0 0.945335
+EFGGKIKIV 0 0.954326 0 0.907470 0 0.893726 0 0.920000
+FGGKIKIVE 0 0.965608 0 0.948515 0 0.938728 0 0.951660
+GGKIKIVEF 0 0.998965 0 0.953294 0 0.946158 0 0.967378
+GKIKIVEFI 1 0.954235 1 0.842793 0 0.729534 1 0.711337
+KIKIVEFIC 0 0.979262 0 0.940662 0 0.923258 0 0.949167
+IKIVEFICF 0 0.996608 0 0.953409 0 0.946120 0 0.966569
+KIVEFICFE 0 0.966700 0 0.946453 0 0.939797 0 0.951653
+IVEFICFEV 0 0.998979 0 0.953766 0 0.946686 0 0.967704
+VEFICFEVG 0 0.833561 0 0.763390 0 0.901051 0 0.829442
+EFICFEVGE 0 0.966728 0 0.948030 0 0.923258 0 0.947266
+FICFEVGEG 0 0.987963 0 0.953742 0 0.946621 0 0.963765
+ICFEVGEGL 0 0.971794 0 0.952581 0 0.942589 0 0.956417
+CFEVGEGLE 0 0.960057 0 0.903039 0 0.918964 0 0.928043
+FEVGEGLEK 0 0.973891 0 0.953662 0 0.946388 0 0.958671
+EVGEGLEKK 0 0.954093 0 0.941591 0 0.922493 0 0.940323
+VGEGLEKKT 1 0.682683 0 0.679527 0 0.839668 0 0.598772
+GEGLEKKTE 1 0.831780 1 0.587878 0 0.685835 1 0.592687
+EGLEKKTED 0 0.964304 0 0.893245 0 0.861021 0 0.908847
+GLEKKTEDF 0 0.863548 0 0.928896 0 0.937762 0 0.908342
+LEKKTEDFA 1 0.726773 1 0.663784 0 0.672455 1 0.585673
+
+
+Program usage:
+
+./PREDPTM_3_01 <PTM_Type> <ARP/AR>
+e.g.,
+./PREDPTM_3_01 Syk ARP
+
+There are two versions of the combiner program, viz. combination of all the three networks A/R/p and only two networks A and R (leaving out the Precision optimized network).
+
+Program usage:
+
+./PREDPTM_3_01 Syk AR
+
+Sample Output:
+
+EGFSYVNPQ 1 0.949915 1 0.852791 0 0.586250 1 0.901973
+RSDVYSDLN 1 0.955910 1 0.877050 1 0.514865 1 0.916984
+TESPYQELQ 1 0.919957 1 0.842698 1 0.501330 1 0.881821
+FDSDYENPD 0 0.854061 0 0.621434 0 0.671414 0 0.739234
+DSEMYVMPA 1 0.561106 1 0.822885 0 0.741552 1 0.690323
+ADDSYEPPP 1 0.905211 1 0.692742 0 0.613214 1 0.800335
+DEADYVVPV 1 0.802611 1 0.642020 0 0.723089 1 0.723342
+TNNDYETAD 0 0.949757 0 0.806818 0 0.769991 0 0.879201
+ADGGYMTLN 1 0.630382 1 0.526889 0 0.831012 1 0.579297
+DKNIYLTLP 1 0.569693 1 0.525624 0 0.664415 1 0.547940
+LVIAYLMMR 0 0.967573 0 0.953586 0 0.946388 0 0.960669
+TNNDYETAD 0 0.949757 0 0.806818 0 0.769991 0 0.879201
+EGFSYVNPQ 1 0.949915 1 0.852791 0 0.586250 1 0.901973
+EDDSYLEPD 1 0.550813 1 0.880762 1 0.567161 1 0.713679
+DNEDYEHED 1 0.833869 1 0.657176 0 0.638757 1 0.746652
+
+It may be noted the some networks are misclassified with weighted averaging with ARP networks because of confident misclassifications by the respective P networks.
+
+
+
+++++++++++++++++
+
+USAGE:./PredPTM_3_11 <PTM type>
+Example: ./PredPTM_3_11 Phospho_PKC
+
+In this approach we assign so-called "n-star" quality result, where n=#ANNs agreeing for this seq fragment to be phosphorylated by PKA (say).
+
+The algorithm:
+Make simple consensus using the consensus program separately: so first make the consensus
+between 3 ANNs (for three optimum networks). Accept only those predicitons that are confirmed by all three optimized nets.
+
+Let's assume that selected fragment is predicted as PKA phosphorylated by ANNs from all three networks Anet, Rnet and Pnet, then the approach confirms that this fragment is phophorylated by PKA and this fragment will be 10-star quality.
+
+If for example only 2 simple-consensus nets are confirming it - it is 2-star quality.
+
+In that way one can collect the fragments starting from 1 up to 3 stars subsets. 
+
+The program generates following output in 'Output' file for a sample PTM.
+
+LRRFSLATM 1 1 1 3
+LRGRSFMNN 1 1 0 2
+SRKRSGEAT 1 1 1 3
+DRRVSVCAE 1 1 1 3
+EIRVSINEK 1 1 0 2
+GRTWTLCGT 1 1 0 2
+QRRRSLEPP 1 1 1 3
+NTDGSTDYG 0 0 0 0
+YRGYSLGNW 1 1 0 2
+RRRPTPATL 1 1 1 3
+VRFESIRLP 1 1 0 2
+CRRSTTDCG 1 1 0 2
+LCRRSTTDC 1 1 0 2
+RRKASGPPV 1 1 0 2
+KTRSSRAGL 1 1 1 3
+KRKRSRKES 1 1 1 3
+PKKGSKKAV 1 1 0 2
+SRKESYSVY 1 1 1 3
+RKVSSAEGA 1 1 0 2
+PRRRTRRAS 1 1 1 3
+TRRASRPVR 1 1 1 3
+
+where the numbers represent prediction status (1:POS and 0:NEG) of a fragment after testing through optimized A/R/P nets and finally the n-star quality of the said fragment. For example:
+
+LRGRSFMNN 1 1 0 2
+
+The above fragment is classified as POS by AUC and Recall optimized networks but classified as NEG by Precision optimized network. So it is classified as a 2-star quality POS Fragment.
+
+
+
++++++++++++++
+PredPTM_3_21 
++++++++++++++
+
+USAGE:./PredPTM_3_21 <PTM type> <A/R/P>
+Example: ./PredPTM_3_21 Phospho_PKC A
+
+
+In this approach we assign so-called "n-star" quality result, where n=#ANNs agreeing for this seq fragment to be phosphorylated by PKA (say). Consensus is obtained for a specific PTM type between all ANN networks, not only between three P/R/A optimized networks, i.e., the 2-20 hidden neurons of any of the three optimizations strategies (A/R/P), and assign the statistical significance based on "how many ANNs agree that selected fragment is predicted as PKA (say)"
+
+If for example only 5 simple-consensus nets are confirming it - it is 5-star quality.
+
+In that way one can collect the fragments starting from 1 up to 10 stars subsets for any of the three optimization strategies A/R/P. 
+
+The program generates following output in 'Output' file for a sample PTM.
+
+LRRFSLATM 1 1 1 1 1 1 1 1 1 1 10
+LRGRSFMNN 1 1 1 0 1 1 1 1 1 1 9
+SRKRSGEAT 1 1 1 1 1 1 1 1 1 1 10
+DRRVSVCAE 1 1 1 1 1 1 1 1 1 1 10
+EIRVSINEK 1 1 1 1 1 1 1 1 1 1 10
+GRTWTLCGT 1 1 1 1 1 1 1 1 1 1 10
+QRRRSLEPP 1 1 1 1 1 1 1 1 1 1 10
+NTDGSTDYG 0 0 0 0 0 0 0 0 0 0 0
+YRGYSLGNW 1 1 1 0 1 1 0 1 1 1 8
+RRRPTPATL 1 1 1 1 1 1 1 1 1 1 10
+VRFESIRLP 1 1 1 1 1 1 1 1 1 1 10
+CRRSTTDCG 1 1 1 1 1 1 1 1 1 1 10
+LCRRSTTDC 0 0 0 0 1 1 1 1 0 1 5
+RRKASGPPV 1 1 1 1 1 1 1 1 1 1 10
+KTRSSRAGL 1 1 1 1 1 1 1 1 1 1 10
+KRKRSRKES 1 1 1 1 1 1 1 1 1 1 10
+PKKGSKKAV 1 1 1 0 1 1 1 1 1 1 9
+SRKESYSVY 1 1 1 1 1 1 1 1 1 1 10
+RKVSSAEGA 1 1 1 1 1 1 1 1 1 1 10
+PRRRTRRAS 1 1 1 1 1 1 1 1 1 1 10
+TRRASRPVR 1 1 1 1 1 1 1 1 1 1 10
+SRRASRPVR 1 1 1 1 1 1 1 1 1 1 10
+RRRRSRRAS 1 1 1 1 1 1 1 1 1 1 10
+RRSSSRPIR 1 1 1 1 1 1 1 1 1 1 10
+GSRGSGSSV 1 1 1 1 1 1 1 1 1 1 10
+VSRTSAVPT 1 1 1 1 1 1 1 1 1 1 10
+
+where the numbers represent prediction status (1:POS and 0:NEG) of a fragment after testing through optimized A/R/P nets and finally the n-star quality of the said fragment. For example:
+
+PKKGSKKAV 1 1 1 0 1 1 1 1 1 1 9
+
+The above fragment is classified as POS by all but the AUC optimized network with hidden neuron 8, i.e., Anet8.dat. So it is classified as a 9-star quality POS Fragment.
+
+
+
+
++++++++++++++
+PredPTM_3_31 
++++++++++++++
+
+USAGE:./PredPTM_3_32 <PTM type> <AR/ARP>
+Example: ./PredPTM_3_31 Phospho_PKC AR
+
+
+In this approach we assign so-called "n-star" quality result, where n=#ANNs agreeing for this seq fragment to be phosphorylated by PKA (say). Consensus is obtained for a specific PTM type between all ANN networks for A and R or all ANN networks for A, R and P, i.e., the 2-20 hidden neurons of ALL the two or three optimizations strategies (AR or ARP), and assign the statistical significance based on "how many ANNs agree that selected fragment is predicted as PKA (say)"
+
+If for example only 15 simple-consensus nets are confirming it - it is 15-star quality.
+
+In that way one can collect the fragments starting from 1 up to 10 stars subsets for each of the three optimization strategies A,R and P, totalling 20 or 30 different networks, based on the option chosen. 
+
+The program generates following output in 'Output' file for a sample PTM, run with option 'AR'.
+
+SRKLSDFGQ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 20
+VRRVSDDVR 1 1 0 0 0 1 1 1 0 1 1 1 1 0 1 1 1 1 1 1 15
+GRRQSLIED 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 20
+KRKSSQCLV 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 20
+RKRKSSQCL 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 20
+PRRNSRASL 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 20
+ERRPSNVSQ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 20
+SRRDSLFVP 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 20
+KRRSSSYHV 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 20
+LRGPSWDPF 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+KREASLDNQ 1 1 1 1 1 1 0 1 0 1 1 1 1 1 1 1 1 1 1 1 18
+NRQSSQARV 0 1 0 0 0 0 0 0 0 0 1 1 0 0 1 1 1 0 0 0 6
+GSRPSESNG 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 20
+APGPSLTGS 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+GRRQSLIED 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 20
+TRRASFSAQ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 20
+QRRTSVSGE 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 20
+SRRSSLGSL 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 20
+QRRTSLTGS 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 20
+QRRSSEGST 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 19
+RRKMSRGLP 1 1 0 1 0 1 0 1 0 0 1 1 1 1 1 1 1 1 1 0 14
+ERTNSLPPV 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 1 0 0 0 0 3
+
+where the numbers represent prediction status (1:POS and 0:NEG) of a fragment after testing through optimized A/R/P nets and finally the n-star quality of the said fragment. For example:
+
+TRRASFSAQ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 20
+
+The above fragment is classified as POS by all 20 optimized networks of A and R. So it is classified as a 20-star quality POS Fragment.
+
+
+
+The program generates following output in 'Output' file for a sample PTM, run with option 'ARP'.
+
+SRKLSDFGQ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 20
+VRRVSDDVR 1 1 0 0 0 1 1 1 0 1 1 1 1 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 15
+GRRQSLIED 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 0 1 1 1 1 0 1 0 26
+KRKSSQCLV 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 1 0 0 0 0 0 21
+RKRKSSQCL 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 20
+PRRNSRASL 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 0 1 1 0 1 0 1 1 26
+ERRPSNVSQ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 20
+SRRDSLFVP 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 20
+KRRSSSYHV 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 0 1 1 0 1 0 1 1 26
+LRGPSWDPF 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+KREASLDNQ 1 1 1 1 1 1 0 1 0 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 18
+NRQSSQARV 0 1 0 0 0 0 0 0 0 0 1 1 0 0 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 6
+GSRPSESNG 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 20
+APGPSLTGS 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+GRRQSLIED 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 0 1 1 1 1 0 1 0 26
+TRRASFSAQ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 0 1 1 1 1 0 1 1 27
+QRRTSVSGE 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 20
+SRRSSLGSL 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 20
+QRRTSLTGS 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1 0 21
+QRRSSEGST 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 19
+RRKMSRGLP 1 1 0 1 0 1 0 1 0 0 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 14
+ERTNSLPPV 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3
+
+
+where the numbers represent prediction status (1:POS and 0:NEG) of a fragment after testing through optimized A/R/P nets and finally the n-star quality of the said fragment. For example:
+
+
+TRRASFSAQ 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 0 1 1 1 1 0 1 1 27
+
+The above fragment is classified as POS by 27 optimized networks. So it is classified as a 27-star quality POS Fragment.
